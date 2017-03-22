@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Extraction</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link href="css/fontAwesome/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="upload/component.css" />
+        <link rel="stylesheet" type="text/css" href="css/cssLoader.css" />
+        <!--<link rel="stylesheet" type="text/css" href="css/jquerytour.css" />-->
+        <!--<link rel="stylesheet" type="text/css" href="upload/demo.css" />-->
+    </head>
+    <body class="body">
+        <div class="container-fluid">
+            <header class="tour_7 header">
+              <span class='Header-font'>  Intelligent character recognition Engine</span>
+            </header>
+<!--            <div class="col-lg-12">
+                <div class="col-sm-9"></div>   
+                <div class="col-sm-3"></div>   
+            </div>-->
+<div class="content">
+            <div class="col-lg-12" style="text-align: center;margin-top: 10%">
+                <img style="width:20%" src="images/logo.jpg" >    
+            </div>
+            <div class="col-lg-12" style="margin-top: 1%">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    
+                    
+                        <div class="box left col-sm-12" style="text-align: center">
+                           
+                            <input type="file" style="display: none" name="file-7[]" id="file-7" onchange="getDirectory(event)" class="inputfile inputfile-6" webkitdirectory mozdirectory msdirectory odirectory directory multiple data-multiple-caption="{count} files selected" multiple />
+                            <label class="tour_1" for="file-7" class="col-sm-12" style="height:32px" ><div class="col-sm-8"><span class="col-sm-8"></span></div > <div class="col-sm-4"><strong  style="float: right;position: absolute;right:0"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> Choose a directory</strong></div></label>
+				</div>
+<!--                        <input type="file" id="files" name="files[]" multiple />
+                        <output id="list"></output>-->
+               
+                    
+                </div>
+                <div class="col-sm-2"></div>
+                
+            </div>
+            <div class="box left col-lg-12" style="text-align: center;margin-top:2%">
+               
+                
+                   
+                    <button type="button" style="width:15%" class="tour_2 btn btn-lg btn-info active" onclick="showLoading()">Extract</button>
+                    
+               
+                <!--<button type="button" class="btn btn-sm btn-info active" onclick="browseDirectory()">Convert</button>--> 
+            
+            
+        </div>
+            <div class="col-lg-12" style="text-align: center">
+            <div id="floatBarsG" class="" style="margin-top: 3%;display: none">
+	<div id="floatBarsG_1" class="floatBarsG"></div>
+	<div id="floatBarsG_2" class="floatBarsG"></div>
+	<div id="floatBarsG_3" class="floatBarsG"></div>
+	<div id="floatBarsG_4" class="floatBarsG"></div>
+	<div id="floatBarsG_5" class="floatBarsG"></div>
+	<div id="floatBarsG_6" class="floatBarsG"></div>
+	<div id="floatBarsG_7" class="floatBarsG"></div>
+	<div id="floatBarsG_8" class="floatBarsG"></div>
+</div>
+</div>
+            <div class="col-sm-12" style="margin-top: 7%">
+               
+                <div class="col-sm-12" id="content" style="display:none;text-align: center"> <h3><em>Data has been extracted, press download  to get the text file.</em> </h3></div>
+                
+            </div>
+            <div class="col-sm-12" style="margin-top: 4%">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4" ><button id="DownloadCSV" type="button" style="display:none" class="tour_3 btn btn-lg btn-info active" onclick="readJSON()">Download </button></div>
+                
+            </div> 
+</div>
+            <footer class="footer">
+          <div class="pull-right">
+            <h5>   Terms & Conditions . Privacy Policy . <i class="fa fa-copyright" aria-hidden="true"></i> 2016 Powered by @ Karvy Analytics .</h5>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        </div>
+          <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>-->
+    <script src="jQuery/jquery.min.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <script src="upload/custom-file-input.js"></script>
+        <script type="text/javascript">
+            function showLoading(){
+                $('#floatBarsG').addClass("modal "); 
+                $('#floatBarsG').css("display","block"); 
+//               $(".body").addClass("modal-backdrop in "); 
+              setTimeout(function(){
+                $('#floatBarsG').removeClass("modal "); 
+                $('#floatBarsG').css("display","none");
+                $('#DownloadCSV').css("display","block");
+                $('#content').css("display","block");
+                }, 5000);
+                 
+            }
+            
+          function getDirectory(e){
+                 var theFiles = e.target.files;
+                 var relativePath = theFiles[0].webkitRelativePath;
+//                 var folder = relativePath.split("/");
+                 var folder = relativePath;
+//                 alert(folder);
+                 
+          } 
+             
+           function readJSON(){
+//               $.getJSON("accuracy_kinrep.json",function(data){
+//                  JSONToCSVConvertor(data, "Accuracy Kinrep", true);
+//               });
+              $.get("extractCSV/form.csv",function(data){
+                 
+                 
+                   JSONToCSVConvertor(data, "Output", true);
+              })
+
+           }  
+
+// for the json data 
+function JSONToCSVConvertor1(JSONData, ReportTitle, ShowLabel) {
+    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    
+    var CSV = '';    
+    //Set Report title in first row or line
+    
+//    CSV += ReportTitle + '\r\n\n';
+
+    //This condition will generate the Label/Header
+    if (ShowLabel) {
+        var row = "";
+        
+        //This loop will extract the label from 1st index of on array
+        for (var index in arrData[0]) {
+            
+            //Now convert each value to string and comma-seprated
+            row += index + ',';
+        }
+
+        row = row.slice(0, -1);
+        
+        //append Label row with line break
+        CSV += row + '\r\n';
+    }
+    
+    //1st loop is to extract each row
+    for (var i = 0; i < arrData.length; i++) {
+        var row = "";
+        
+        //2nd loop will extract each column and convert it in string comma-seprated
+        for (var index in arrData[i]) {
+            row += '"' + arrData[i][index] + '",';
+        }
+
+        row.slice(0, row.length - 1);
+        
+        //add a line break after each row
+        CSV += row + '\r\n';
+    }
+
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+    
+    //Generate a file name
+    var fileName = "";
+    //this will remove the blank-spaces from the title and replace it with an underscore
+    fileName += ReportTitle.replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+//    alert(CSV)
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = fileName + ".xlsx";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+// end of code 
+
+//for the csv data 
+function JSONToCSVConvertor(CSV, ReportTitle, ShowLabel) {
+  //Generate a file name
+    var fileName = "";
+    //this will remove the blank-spaces from the title and replace it with an underscore
+    fileName += ReportTitle.replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+    
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = fileName + "_Royal_Sundaram.xlsx";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);  
+}
+// end of code 
+
+//           function handleFileSelect(evt) {
+//    var files = evt.target.files; // FileList object
+//
+//    // files is a FileList of File objects. List some properties.
+//    var output = [];
+//    for (var i = 0, f; f = files[i]; i++) {
+//      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+//                  f.size, ' bytes, last modified: ',
+//                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+//                  '</li>');
+//    }
+//    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+//  }
+//
+//  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+        </script>
+<!--        <script type="text/javascript">
+        $(function() {
+				/*
+				the json config obj.
+				name: the class given to the element where you want the tooltip to appear
+				bgcolor: the background color of the tooltip
+				color: the color of the tooltip text
+				text: the text inside the tooltip
+				time: if automatic tour, then this is the time in ms for this step
+				position: the position of the tip. Possible values are
+					TL	top left
+					TR  top right
+					BL  bottom left
+					BR  bottom right
+					LT  left top
+					LB  left bottom
+					RT  right top
+					RB  right bottom
+					T   top
+					R   right
+					B   bottom
+					L   left
+				 */
+				var config = [
+					{
+						"name" 		: "tour_1",
+						"bgcolor"	: "black",
+						"color"		: "white",
+						"position"	: "TL",
+						"text"		: "Click here to choose a directory",
+						"time" 		: 5000
+					},
+					{
+						"name" 		: "tour_2",
+						"bgcolor"	: "black",
+						"color"		: "white",
+						"text"		: "click here to extract the data from the selected directory files.",
+						"position"	: "TL",
+						"time" 		: 5000
+					},
+					{
+						"name" 		: "tour_3",
+						"bgcolor"	: "black",
+						"color"		: "white",
+						"text"		: "Click here to download the extratcted data ",
+						"position"	: "TL",
+						"time" 		: 5000
+					},
+					{
+						"name" 		: "tour_7",
+						"bgcolor"	: "black",
+						"color"		: "white",
+						"text"		: "End of tour",
+						"position"	: "TL",
+						"time" 		: 5000
+					}
+
+				],
+				//define if steps should change automatically
+				autoplay	= false,
+				//timeout for the step
+				showtime,
+				//current step of the tour
+				step		= 0,
+				//total number of steps
+				total_steps	= config.length;
+					
+				//show the tour controls
+				showControls();
+				
+				/*
+				we can restart or stop the tour,
+				and also navigate through the steps
+				 */
+				$('#activatetour').live('click',startTour);
+				$('#canceltour').live('click',endTour);
+				$('#endtour').live('click',endTour);
+				$('#restarttour').live('click',restartTour);
+				$('#nextstep').live('click',nextStep);
+				$('#prevstep').live('click',prevStep);
+				
+				function startTour(){
+					$('#content').css("display","block");
+					$('#DownloadCSV').css("display","block");
+					$('#activatetour').remove();
+					$('#endtour,#restarttour').show();
+					if(!autoplay && total_steps > 1)
+						$('#nextstep').show();
+					showOverlay();
+					nextStep();
+				}
+				
+				function nextStep(){
+					if(!autoplay){
+						if(step > 0)
+							$('#prevstep').show();
+						else
+							$('#prevstep').hide();
+						if(step == total_steps-1)
+							$('#nextstep').hide();
+						else
+							$('#nextstep').show();	
+					}	
+					if(step >= total_steps){
+						//if last step then end tour
+						endTour();
+						return false;
+					}
+					++step;
+					showTooltip();
+				}
+				
+				function prevStep(){
+					if(!autoplay){
+						if(step > 2)
+							$('#prevstep').show();
+						else
+							$('#prevstep').hide();
+						if(step == total_steps)
+							$('#nextstep').show();
+					}		
+					if(step <= 1)
+						return false;
+					--step;
+					showTooltip();
+				}
+				
+				function endTour(){
+                                    $('#content').css("display","none");
+				    $('#DownloadCSV').css("display","none");
+					step = 0;
+					if(autoplay) clearTimeout(showtime);
+					removeTooltip();
+					hideControls();
+					hideOverlay();
+				}
+				
+				function restartTour(){
+                                    $('#content').css("display","block");
+				    $('#DownloadCSV').css("display","block");
+					step = 0;
+					if(autoplay) clearTimeout(showtime);
+					nextStep();
+				}
+				
+				function showTooltip(){
+					//remove current tooltip
+					removeTooltip();
+					
+					var step_config		= config[step-1];
+					var $elem			= $('.' + step_config.name);
+					
+					if(autoplay)
+						showtime	= setTimeout(nextStep,step_config.time);
+					
+					var bgcolor 		= step_config.bgcolor;
+					var color	 		= step_config.color;
+					
+					var $tooltip		= $('<div>',{
+						id			: 'tour_tooltip',
+						className 	: 'tooltip',
+						html		: '<p>'+step_config.text+'</p><span class="tooltip_arrow"></span>'
+					}).css({
+						'display'			: 'none',
+						'background-color'	: bgcolor,
+						'color'				: color
+					});
+					
+					//position the tooltip correctly:
+					
+					//the css properties the tooltip should have
+					var properties		= {};
+					
+					var tip_position 	= step_config.position;
+					
+					//append the tooltip but hide it
+					$('BODY').prepend($tooltip);
+					
+					//get some info of the element
+					var e_w				= $elem.outerWidth();
+					var e_h				= $elem.outerHeight();
+					var e_l				= $elem.offset().left;
+					var e_t				= $elem.offset().top;
+					
+					
+					switch(tip_position){
+						case 'TL'	:
+							properties = {
+								'left'	: e_l,
+								'top'	: e_t + e_h +e_h*.2 + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_TL');
+							break;
+						case 'TR'	:
+							properties = {
+								'left'	: e_l + e_w - $tooltip.width() + 'px',
+								'top'	: e_t + e_h + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_TR');
+							break;
+						case 'BL'	:
+							properties = {
+								'left'	: e_l + 'px',
+								'top'	: e_t - $tooltip.height() + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_BL');
+							break;
+						case 'BR'	:
+							properties = {
+								'left'	: e_l + e_w - $tooltip.width() + 'px',
+								'top'	: e_t - $tooltip.height() + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_BR');
+							break;
+						case 'LT'	:
+							properties = {
+								'left'	: e_l + e_w + 'px',
+								'top'	: e_t + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_LT');
+							break;
+						case 'LB'	:
+							properties = {
+								'left'	: e_l + e_w + 'px',
+								'top'	: e_t + e_h - $tooltip.height() + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_LB');
+							break;
+						case 'RT'	:
+							properties = {
+								'left'	: e_l - $tooltip.width() + 'px',
+								'top'	: e_t + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_RT');
+							break;
+						case 'RB'	:
+							properties = {
+								'left'	: e_l - $tooltip.width() + 'px',
+								'top'	: e_t + e_h - $tooltip.height() + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_RB');
+							break;
+						case 'T'	:
+							properties = {
+								'left'	: e_l + e_w/2 - $tooltip.width()/2 + 'px',
+								'top'	: e_t + e_h + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_T');
+							break;
+						case 'R'	:
+							properties = {
+								'left'	: e_l - $tooltip.width() + 'px',
+								'top'	: e_t + e_h/2 - $tooltip.height()/2 + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_R');
+							break;
+						case 'B'	:
+							properties = {
+								'left'	: e_l + e_w/2 - $tooltip.width()/2 + 'px',
+								'top'	: e_t - $tooltip.height() + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_B');
+							break;
+						case 'L'	:
+							properties = {
+								'left'	: e_l + e_w  + 'px',
+								'top'	: e_t + e_h/2 - $tooltip.height()/2 + 'px'
+							};
+							$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_L');
+							break;
+					}
+					
+					
+					/*
+					if the element is not in the viewport
+					we scroll to it before displaying the tooltip
+					 */
+					var w_t	= $(window).scrollTop();
+					var w_b = $(window).scrollTop() + $(window).height();
+					//get the boundaries of the element + tooltip
+					var b_t = parseFloat(properties.top,10);
+					
+					if(e_t < b_t)
+						b_t = e_t;
+					
+					var b_b = parseFloat(properties.top,10) + $tooltip.height();
+					if((e_t + e_h) > b_b)
+						b_b = e_t + e_h;
+						
+					
+					if((b_t < w_t || b_t > w_b) || (b_b < w_t || b_b > w_b)){
+						$('html, body').stop()
+						.animate({scrollTop: b_t}, 500, 'easeInOutExpo', function(){
+							//need to reset the timeout because of the animation delay
+							if(autoplay){
+								clearTimeout(showtime);
+								showtime = setTimeout(nextStep,step_config.time);
+							}
+							//show the new tooltip
+							$tooltip.css(properties).show();
+						});
+					}
+					else
+					//show the new tooltip
+						$tooltip.css(properties).show();
+				}
+				
+				function removeTooltip(){
+					$('#tour_tooltip').remove();
+				}
+				
+				function showControls(){
+					/*
+					we can restart or stop the tour,
+					and also navigate through the steps
+					 */
+					var $tourcontrols  = '<div id="tourcontrols" class="tourcontrols">';
+					$tourcontrols += '<p>First time here?</p>';
+					$tourcontrols += '<span class="button" id="activatetour">Start the tour</span>';
+						if(!autoplay){
+							$tourcontrols += '<div class="nav"><span class="button" id="prevstep" style="display:none;">< Previous</span>';
+							$tourcontrols += '<span class="button" id="nextstep" style="display:none;">Next ></span></div>';
+						}
+						$tourcontrols += '<a id="restarttour" style="display:none;">Restart the tour</span>';
+						$tourcontrols += '<a id="endtour" style="display:none;">End the tour</a>';
+						$tourcontrols += '<span class="close" id="canceltour"></span>';
+					$tourcontrols += '</div>';
+					
+					$('BODY').prepend($tourcontrols);
+					$('#tourcontrols').animate({'right':'30px'},500);
+				}
+				
+				function hideControls(){
+					$('#tourcontrols').remove();
+				}
+				
+				function showOverlay(){
+					var $overlay	= '<div id="tour_overlay" class="overlay"></div>';
+					$('BODY').prepend($overlay);
+				}
+				
+				function hideOverlay(){
+					$('#tour_overlay').remove();
+				}
+				
+			});    
+        </script>-->
+      
+    
+    </body>
+</html>
+<!-- https://github.com/SheetJS/js-xls/blob/master/xls.js -->
